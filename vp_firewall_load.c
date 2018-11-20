@@ -18,6 +18,15 @@ int load_rules(rule_t **heads, const char *config_path) {
     /* Read the configuration file line by line and add the rules the rule list */
     while ((read = getline(&line, &len, fp)) != -1) {
         add_rule(nexts, line);
+        if (heads[INPUT] == NULL) {
+            heads[INPUT] = nexts[INPUT];
+        }
+        if (heads[OUTPUT] == NULL) {
+            heads[OUTPUT] = nexts[OUTPUT];
+        }
+        if (heads[FORWARD] == NULL) {
+            heads[FORWARD] = nexts[FORWARD];
+        }
     }
     if (line) {
         free(line);
@@ -288,6 +297,7 @@ int set_mac_address(__int64 *mac_address, const char *param) {
     return 0;
 }
 
+#ifdef DEBUG
 void print_rules(rule_t *head) {
 
     struct rule *next;
@@ -325,16 +335,16 @@ void print_rules(rule_t *head) {
                 printf("Unknown %d\n", next->protocol);
         }
         if (next->source_mac != 0) {
-            printf("Source MAC: %d\n", next->source_mac);
+            printf("Source MAC: %lld\n", next->source_mac);
         }
         if (next->dest_mac != 0) {
-            printf("Destination MAC: %d\n", next->dest_mac);
+            printf("Destination MAC: %lld\n", next->dest_mac);
         }
         if (next->source_ip != 0) {
-            printf("Source IP: %d/%d\n", next->source_ip, next->source_ip_mask);
+            printf("Source IP: %lld/%d\n", next->source_ip, next->source_ip_mask);
         }
         if (next->dest_ip != 0) {
-            printf("Destination IP: %d/%d\n", next->dest_ip, next->dest_ip_mask);
+            printf("Destination IP: %lld/%d\n", next->dest_ip, next->dest_ip_mask);
         }
         if (next->source_port != 0) {
             printf("Source port: %d\n", next->source_port);
@@ -371,9 +381,10 @@ void print_rules(rule_t *head) {
 }
 
 int main() {
-    rule_t *heads[CHAIN_SIZE];
+    rule_t *heads[CHAIN_SIZE] = {NULL, NULL, NULL};
     load_rules(heads, "vp_firewall.conf");
 
+    //return 0;
     printf("INPUT chain:\n");
     printf("----------------------------------------\n");
     print_rules(heads[INPUT]);
@@ -389,5 +400,6 @@ int main() {
     print_rules(heads[FORWARD]);
     printf("----------------------------------------\n");
 
-
+    return 0;
 }
+#endif

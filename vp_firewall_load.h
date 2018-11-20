@@ -8,6 +8,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/types.h>
+#include <unistd.h>
 
 
 #define MAC_ADDR_SIZE 17
@@ -22,18 +24,28 @@
 
 typedef long long __int64;
 
-
+/**
+ * Type of the rule, default is FILTER.
+ */
 typedef enum type {
     FILTER, NAT, MANGLE
 } type_t;
+/**
+ * The protocol for the rule, the default is OTHER.
+ */
 typedef enum protocol {
-    TCP, UDP, ICMP, OTHER
+    OTHER=1000, TCP=6, UDP=17, ICMP=1,
 } protocol_t;
-
+/**
+ * The action for the rule, there is no default action.
+ */
 typedef enum action {
-    ACCEPT, DROP, REJECT
+    ACCEPT = 1, DROP, REJECT
 } action_t;
-
+/**
+ * The rule struct, where it builds a single linked list. The firewall holds three linked lists for
+ * INPUT, OUTPUT and FORWARD chains.
+ */
 typedef struct rule {
     type_t type;
     protocol_t protocol;
@@ -63,5 +75,7 @@ int get_next_param(const char *line, int start_index, char *param);
 int set_ip_address(__int128 *ip_address, short *ip_mask, const char *param);
 
 int set_mac_address(__int64 *mac_address, const char *param);
+
+void print_rules(rule_t *head);
 
 #endif //VP_FIREWALL_LOAD_H
