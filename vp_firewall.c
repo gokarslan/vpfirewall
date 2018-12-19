@@ -43,7 +43,7 @@ int main(int argc, char **argv) {
     char buf[4096] __attribute__ ((aligned));
 
     packet_queue_t *packet_queue = calloc(1, sizeof(packet_queue_t));
-    init_pthread_pool(POOL_SIZE, packet_queue, rules);
+    init_pthread_pool(pool_size, packet_queue, rules);
 
     printf("opening library handle\n");
     h = nfq_open();
