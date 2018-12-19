@@ -1,6 +1,11 @@
 #include "vp_firewall_load.h"
 
-
+/**
+ * Load firewall rules from the given path.
+ * @param heads
+ * @param config_path
+ * @return
+ */
 int load_rules(rule_t **heads, const char *config_path) {
 
     FILE *fp = fopen(config_path, "r");
@@ -34,7 +39,12 @@ int load_rules(rule_t **heads, const char *config_path) {
     fclose(fp);
     return 0;
 }
-
+/**
+ * Add a rule to the rule queue from the file.
+ * @param nexts
+ * @param line
+ * @return
+ */
 int add_rule(rule_t **nexts, const char *line) {
     rule_t *next = calloc(1, sizeof(rule_t));
     char param[BUFFER_SIZE];

@@ -10,12 +10,16 @@
 #include "vp_firewall_pthread.h"
 #include "packet_queue.h"
 
+#define POOL_SIZE 10
+
 static rule_t *rules[CHAIN_SIZE] = {NULL, NULL, NULL};
 
-// compile with -lnetfilter_queue
-// install quque_devel
-
-
+/**
+ * Initializes vpFirewall.
+ * @param argc
+ * @param argv
+ * @return
+ */
 int main(int argc, char **argv) {
     printf("vpFirewall is starting...\n");
     char *config_path = "vp_firewall.conf";
@@ -31,9 +35,8 @@ int main(int argc, char **argv) {
     int rv;
     char buf[4096] __attribute__ ((aligned));
 
-    int pool_size = 12;
     packet_queue_t *packet_queue = calloc(1, sizeof(packet_queue_t));
-    init_pthread_pool(pool_size, packet_queue, rules);
+    init_pthread_pool(POOL_SIZE, packet_queue, rules);
 
     printf("opening library handle\n");
     h = nfq_open();
@@ -71,7 +74,6 @@ int main(int argc, char **argv) {
 
     printf("vpFirewall started.\n");
     while ((rv = recv(fd, buf, sizeof(buf), 0))) {
-        printf("pkt received\n");
         nfq_handle_packet(h, buf, rv);
     }
 

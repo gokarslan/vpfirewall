@@ -74,15 +74,6 @@ unsigned int fn_hook_incoming(unsigned int hooknum,
     } else {
         //return NF_ACCEPT;
     }
-    /*if (dest_port != 22) {
-        printk(KERN_INFO
-        "IN packet info: src ip: %u, src port: %u; dest ip: %u, dest port: %u; proto: %un", src_ip, src_port, dest_ip, dest_port, ip_header->protocol);
-    }
-    if (dest_port == 8000) {
-        printk(KERN_INFO
-        "Added to queue");
-        return NF_QUEUE;
-    }*/
     // Accept SSH, testing purposes.
     if (dest_port == 22)
         return NF_ACCEPT;
@@ -135,15 +126,6 @@ unsigned int fn_hook_outgoing(unsigned int hooknum,
 
 
     }
-    /*if (src_port != 22) {
-        printk(KERN_INFO
-        "OUT packet info: src ip: %u, src port: %u; dest ip: %u, dest port: %u; proto: %un", src_ip, src_port, dest_ip, dest_port, ip_header->protocol);
-    }
-    if (src_port == 8000) {
-        printk(KERN_INFO
-        "Added to queue/out");
-        return NF_QUEUE;
-    }*/
     if (src_port == 22)
         return NF_ACCEPT;
     return NF_QUEUE;
