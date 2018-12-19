@@ -10,7 +10,7 @@
 #include "vp_firewall_pthread.h"
 #include "packet_queue.h"
 
-#define POOL_SIZE 10
+#define DEFAULT_POOL_SIZE 10
 
 static rule_t *rules[CHAIN_SIZE] = {NULL, NULL, NULL};
 
@@ -23,6 +23,13 @@ static rule_t *rules[CHAIN_SIZE] = {NULL, NULL, NULL};
 int main(int argc, char **argv) {
     printf("vpFirewall is starting...\n");
     char *config_path = "vp_firewall.conf";
+    int pool_size = DEFAULT_POOL_SIZE;
+    if(argc > 1){
+        config_path = argv[1];
+    }
+    if(argc > 2){
+        pool_size = atoi(argv[2]);
+    }
     if (load_rules(rules, config_path) == 0) {
         printf("Rules are loaded from %s\n", config_path);
     } else {
@@ -72,7 +79,7 @@ int main(int argc, char **argv) {
 
     fd = nfq_fd(h);
 
-    printf("vpFirewall started.\n");
+    printf("vpFirewall started with pool size %d\n", pool_size);
     while ((rv = recv(fd, buf, sizeof(buf), 0))) {
         nfq_handle_packet(h, buf, rv);
     }
