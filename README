@@ -1,5 +1,5 @@
-# vpFirewall
+# vpFirewall: Virtual Parallel Firewall
 
-vpFirewall is a prot
+vpFirewall is a state-of-art multithreaded virtual firewall, which aims to show that multi- threading increases the network throughput of the system.
 
-insmod vp_firewall_kernel.ko
+Please read vpFirewall_report_CPSC_524_Final_Project.pdf for more details.
