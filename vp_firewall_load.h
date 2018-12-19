@@ -5,6 +5,8 @@
 #ifndef VP_FIREWALL_LOAD_H
 #define VP_FIREWALL_LOAD_H
 
+#define _GNU_SOURCE
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

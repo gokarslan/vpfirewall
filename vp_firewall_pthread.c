@@ -117,7 +117,7 @@ int handle_l3l4(char *data, int id) {
                     break;
             }
             // Verdict is set, return
-            return;
+            return 0;
         }
 
     }
